@@ -1,2 +1,2 @@
 # JavaScript-Fundamentals
-JavaScript-Fundamentals Course Completed
+JavaScript-Fundamentals Course Completed + Simple Canvas Game

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monthly Calendar</title>
+    <style>
+        .prev-month, .next-month {
+            color: #CCC
+        }
+
+        .today {
+            font-weight: bold;
+            background: #DDD;
+        }
+
+        .title {
+            background: #AAAAFF;
+            margin: 10px 0;
+            padding: 5px
+        }
+
+        table {
+            border: 1px solid #CCC;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        #calendarCode {
+            width: 100%;
+        }
+    </style>
+    <script>
+        function calendar([day, month, year]) {
+            let calendarColumns = 7
+
+            let currentDate = new Date(year, month - 1, day)
+            let firstDayOfTheCurrentMonth = new Date(year, month - 1, 1)
+            let lastDayOfTheCurrentMonth = new Date(year, month, 0)
+            let firstDateOfCalendar = new Date(year, month - 1, 1 - firstDayOfTheCurrentMonth.getDay())
+            let lastDateOfCalendar = new Date(year, month - 1, lastDayOfTheCurrentMonth.getDate() + 7 - lastDayOfTheCurrentMonth.getDay())
+
+            let output = '<table>\n'
+            output += '  <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>\n'
+
+            while (true){
+                if (firstDateOfCalendar.getTime() === lastDateOfCalendar.getTime()){
+                    break
+                }
+
+                output += '  <tr>'
+                for (let i = 0; i < calendarColumns; i++) {
+                    let tag
+
+                    if (firstDateOfCalendar.getTime() < firstDayOfTheCurrentMonth.getTime()){
+                        tag = ' class="prev-month"'
+                    } else if (firstDateOfCalendar.getTime() > lastDayOfTheCurrentMonth.getTime()){
+                        tag = ' class="next-month"'
+                    } else {
+                        tag = firstDateOfCalendar.getDate() !== currentDate.getDate() ? '' : ' class="today"'
+                    }
+
+                    output += `<td${tag}>${firstDateOfCalendar.getDate()}</td>`
+
+                    firstDateOfCalendar.setDate(firstDateOfCalendar.getDate() + 1)
+                }
+                output += '</tr>\n'
+            }
+            output += '</table>\n'
+            return output
+        }
+    </script>
+</head>
+<body>
+    Day: <input id="day" type="number" value="24"/>
+    Month: <input id="month" type="number" value="12"/>
+    Year: <input id="year" type="number" value="2012"/>
+    <input type="button" value="Show"
+            onclick="let calendarHTML =
+            calendar([document.getElementById('day').value, document.getElementById('month').value, document.getElementById('year').value]);
+            document.getElementById('calendar').innerHTML = calendarHTML;
+            document.getElementById('calendarCode').innerText = calendarHTML"/>
+    <div class="title">Calendar:</div>
+    <div id="calendar">Calendar will be shown here</div>
+    <div class="title">HTML:</div>
+    <textarea rows="12" id="calendarCode"></textarea>
+</body>
+</html>
